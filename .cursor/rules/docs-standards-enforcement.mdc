@@ -1,0 +1,29 @@
+---
+description: Enforce project documentation standards for docs markdown files
+globs: docs/**/*.md
+alwaysApply: false
+---
+
+# Documentation Standards Enforcement
+
+When creating or editing files under `docs/**/*.md`, follow:
+
+- `docs/standards/doc-template.md`
+- `docs/standards/devlog.md`
+- `docs/standards/github-workflow.md`
+- `docs/standards/superpowers-compliance-checklist.md`
+
+## Mandatory Rules
+
+- Include valid YAML frontmatter for standard documents and plans.
+- Keep headings clear, concise, and structurally consistent.
+- Use short paragraphs and bullet lists; avoid tables, emojis, and decorative formatting.
+- Explicitly define goals and non-goals for design and planning docs.
+- Keep invariants and critical rules visible when relevant.
+- For issue and PR process content, require GitHub MCP conventions from `github-workflow.md`.
+
+## Devlog-Specific Rules
+
+- Devlog entries must follow the naming and frontmatter contract in `devlog.md`.
+- Include motivation and concrete changes, not only chronology.
+- Keep commit references complete before finalizing entries.

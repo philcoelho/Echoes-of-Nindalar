@@ -1,0 +1,14 @@
+---
+description: Enforce Bun as the default package manager for this project
+alwaysApply: true
+---
+
+# Bun Package Manager Rule
+
+- Use Bun as the default package manager for all setup, dependency, and script commands.
+- Prefer:
+  - `bun install` instead of `npm install` or `pnpm install`
+  - `bun run <script>` instead of `npm run <script>`
+  - `bunx <tool>` for one-off CLI execution when applicable
+- Treat `bun.lock` as the lockfile source of truth.
+- Do not introduce npm or pnpm commands in project documentation, plans, or implementation unless explicitly requested.

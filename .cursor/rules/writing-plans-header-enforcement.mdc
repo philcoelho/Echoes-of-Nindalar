@@ -1,0 +1,18 @@
+---
+description: Preserve mandatory writing-plans header in implementation plan docs
+alwaysApply: true
+---
+
+# Writing-Plans Header Enforcement
+
+For implementation plan files generated or updated with Superpowers workflows:
+
+- Keep the mandatory block exactly in the document:
+  - `# <Feature Name> Implementation Plan`
+  - `> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.`
+  - `**Goal:** ...`
+  - `**Architecture:** ...`
+  - `**Tech Stack:** ...`
+- Do not remove this block during normalization to project documentation standards.
+- If formatting updates are needed, apply them around this mandatory header block.
+- If the block is missing in a plan file, restore it before handoff.

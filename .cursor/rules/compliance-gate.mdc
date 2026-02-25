@@ -1,0 +1,20 @@
+---
+description: Enforce Superpowers compliance checklist gates in all sessions
+alwaysApply: true
+---
+
+# Compliance Gate (Mandatory)
+
+Use `docs/standards/superpowers-compliance-checklist.md` as a required quality gate in this project.
+
+- Before proposing implementation, verify checklist applicability and required artifacts.
+- Before claiming completion, explicitly validate the 10 checklist items.
+- If any mandatory item fails, stop and fix the gap before proceeding.
+- Keep handoffs objective: include next step and success criteria.
+- Do not skip scope boundaries or non-goals in design and plan outputs.
+
+## Required Output Behavior
+
+- Report checklist pass/fail status when finishing substantial tasks.
+- When blocked by missing inputs, ask concise clarifying questions instead of assuming.
+- Prefer small, testable steps aligned with approved architecture and standards.
