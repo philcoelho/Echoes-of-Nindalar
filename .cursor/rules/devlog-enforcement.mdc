@@ -1,0 +1,42 @@
+---
+description: Enforce mandatory devlog updates for every code generation task
+alwaysApply: true
+---
+
+# Mandatory Devlog Enforcement for Code Tasks
+
+Use `docs/standards/devlog.md` as required process for any task that creates or modifies code or configuration.
+
+## Mandatory workflow
+
+1. Before or during the first code change, identify the devlog context folder under `docs/devlog/`:
+   - `issue-{n}/`, `pr-{n}/`, `{branch-name}/`, or `setup/`.
+2. Ensure there is one session entry file using:
+   - `YYYY-MM-DD-HH-MM-SS-{slug}.md`
+3. Keep the entry updated during the task with rationale and technical decisions.
+4. Before claiming task completion, validate the entry against `devlog.md` invariants.
+
+## Completion gate for code tasks
+
+Do not mark a code task as complete until devlog is compliant with:
+
+- valid frontmatter with `date`, `scope`, `type`, `commits`
+- allowed `type`: `feat`, `fix`, `refactor`, `chore`, `docs`, `test`
+- required body sections:
+  - `Motivation`
+  - `Changes Made`
+  - `Key Technical Details`
+  - `Files Changed`
+
+## Commit traceability rule
+
+- When new commits are created, update `commits` with all covered short SHAs.
+- If SHAs are not available yet, keep the entry as in-progress and do not finalize handoff claims.
+
+## Handoff requirement
+
+Every code-task handoff must explicitly report:
+
+- devlog path updated
+- compliance status against `docs/standards/devlog.md`
+- next step and objective success criteria

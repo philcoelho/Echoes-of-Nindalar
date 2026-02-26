@@ -1,0 +1,71 @@
+name: CodeQL
+
+on:
+  pull_request:
+    branches:
+      - dev
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language:
+          - javascript-typescript
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+
+      - name: Block on open critical alerts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request?.number;
+            if (!prNumber) {
+              core.setFailed("Missing pull request number in workflow context.");
+              return;
+            }
+
+            const alerts = await github.paginate(
+              github.rest.codeScanning.listAlertsForRepo,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: "open",
+                pr: prNumber,
+                per_page: 100
+              }
+            );
+
+            const criticalAlerts = alerts.filter((alert) => {
+              const securityLevel = String(alert.rule?.security_severity_level || "").toLowerCase();
+              const ruleSeverity = String(alert.rule?.severity || "").toLowerCase();
+              return securityLevel === "critical" || ruleSeverity === "critical";
+            });
+
+            if (criticalAlerts.length > 0) {
+              core.setFailed(
+                `Blocking merge: found ${criticalAlerts.length} open critical code scanning alert(s) for PR #${prNumber}.`
+              );
+              return;
+            }
+
+            core.info(`No open critical code scanning alerts found for PR #${prNumber}.`);
