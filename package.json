@@ -10,6 +10,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "review:metrics": "bun run scripts/review-metrics/collect-metrics.ts",
     "format": "biome format . --write",
     "lint": "biome lint .",
     "check": "biome check .",
@@ -24,7 +25,7 @@
     "@tanstack/react-start": "^1.132.0",
     "@tanstack/router-plugin": "^1.132.0",
     "lucide-react": "^0.545.0",
-    "nitro": "npm:nitro-nightly@latest",
+    "nitro": "2.10.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tailwindcss": "^4.1.18"
@@ -47,6 +48,7 @@
     "vitest": "^3.0.5"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,cjs,mjs,css,json,jsonc,md}": "bunx @biomejs/biome check --write"
+    "src/**/*.{js,jsx,ts,tsx,cjs,mjs,css,json,jsonc}": "bunx @biomejs/biome check --write",
+    "vite.config.ts": "bunx @biomejs/biome check --write"
   }
 }
