@@ -2,19 +2,25 @@ import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
-import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-const config = defineConfig({
-	plugins: [
+export default defineConfig(async () => {
+	const plugins = [
 		devtools(),
-		nitro({ rollupConfig: { external: [/^@sentry\//] } }),
 		tsconfigPaths({ projects: ["./tsconfig.json"] }),
 		tailwindcss(),
 		tanstackStart(),
 		viteReact(),
-	],
-});
+	];
 
-export default config;
+	try {
+		const nitroVitePath: string = "nitro/vite";
+		const { nitro } = await import(nitroVitePath);
+		plugins.splice(1, 0, nitro({ rollupConfig: { external: [/^@sentry\//] } }));
+	} catch {
+		// Allow local dev when nitro/vite is temporarily unavailable.
+	}
+
+	return { plugins };
+});
