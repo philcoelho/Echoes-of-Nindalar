@@ -1,14 +1,75 @@
 import { Link } from "@tanstack/react-router";
 import { Home, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function Header() {
 	const [isOpen, setIsOpen] = useState(false);
+	const openMenuButtonRef = useRef<HTMLButtonElement>(null);
+	const closeMenuButtonRef = useRef<HTMLButtonElement>(null);
+	const drawerRef = useRef<HTMLElement>(null);
+
+	const closeMenu = useCallback(() => {
+		setIsOpen(false);
+		requestAnimationFrame(() => {
+			openMenuButtonRef.current?.focus();
+		});
+	}, []);
+
+	useEffect(() => {
+		if (!isOpen) return;
+
+		closeMenuButtonRef.current?.focus();
+
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape") {
+				event.preventDefault();
+				closeMenu();
+				return;
+			}
+
+			if (event.key === "Tab") {
+				const drawerElement = drawerRef.current;
+				if (!drawerElement) return;
+
+				const focusableElements = drawerElement.querySelectorAll<HTMLElement>(
+					'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+				);
+
+				if (focusableElements.length === 0) return;
+
+				const firstElement = focusableElements[0];
+				const lastElement = focusableElements[focusableElements.length - 1];
+				const activeElementIsInDrawer = drawerElement.contains(
+					document.activeElement,
+				);
+
+				if (!activeElementIsInDrawer) {
+					event.preventDefault();
+					(event.shiftKey ? lastElement : firstElement).focus();
+					return;
+				}
+
+				if (event.shiftKey && document.activeElement === firstElement) {
+					event.preventDefault();
+					lastElement.focus();
+				} else if (!event.shiftKey && document.activeElement === lastElement) {
+					event.preventDefault();
+					firstElement.focus();
+				}
+			}
+		};
+
+		window.addEventListener("keydown", onKeyDown);
+		return () => {
+			window.removeEventListener("keydown", onKeyDown);
+		};
+	}, [isOpen, closeMenu]);
 
 	return (
 		<>
 			<header className="p-4 flex items-center bg-gray-800 text-white shadow-lg">
 				<button
+					ref={openMenuButtonRef}
 					type="button"
 					onClick={() => setIsOpen(true)}
 					className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
@@ -32,14 +93,16 @@ export default function Header() {
 			{isOpen && (
 				<aside
 					id="primary-navigation-drawer"
-					aria-hidden={!isOpen}
+					ref={drawerRef}
+					aria-label="Primary navigation"
 					className="fixed top-0 left-0 h-full w-80 bg-gray-900 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col translate-x-0"
 				>
 					<div className="flex items-center justify-between p-4 border-b border-gray-700">
 						<h2 className="text-xl font-bold">Navigation</h2>
 						<button
+							ref={closeMenuButtonRef}
 							type="button"
-							onClick={() => setIsOpen(false)}
+							onClick={closeMenu}
 							className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
 							aria-label="Close menu"
 						>
@@ -50,7 +113,7 @@ export default function Header() {
 					<nav className="flex-1 p-4 overflow-y-auto">
 						<Link
 							to="/"
-							onClick={() => setIsOpen(false)}
+							onClick={closeMenu}
 							className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
 							activeProps={{
 								className:
