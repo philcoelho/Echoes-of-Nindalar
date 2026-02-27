@@ -145,7 +145,7 @@ Prompt-level MCP workflow references:
 - Always use GitHub MCP operations for issue and PR management in agent workflows.
 - Always target `dev` as PR base branch unless explicitly approved otherwise.
 - Always assign `philcoelho` on issues and PRs unless changed by project decision.
-- Always assign `Copilot` for code review on PRs, using Github MCP tool for it.
+- Always assign `Copilot` for code review on PRs, using GitHub MCP tool for it.
 - Always include issue reference in PR body, using `Closes #<number>` and explicit context.
 - Never merge unreviewed large PRs that aggregate unrelated tasks.
 - If these invariants are violated, traceability drops and review quality degrades.
