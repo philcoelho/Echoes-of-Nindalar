@@ -124,7 +124,7 @@ Prompt-level MCP workflow references:
   - Language for issue and PR titles, descriptions, and comments must be English.
   - PR base branch must be `dev` unless explicitly approved otherwise.
   - Default assignee is `philcoelho` for issues and PRs.
-  - Default assignee is `Copilot` for code review. **Use Github MCP** to assign codereview.
+  - Default reviewer is `Copilot` for code review. **Use GitHub MCP** to request Copilot as a reviewer via `pull_request_review_write`.
   - PR body must include issue reference, for example `Closes #123`, plus summary and test plan.
   - Labels should be selected from this set:
     - `bug` for broken behavior.
