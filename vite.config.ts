@@ -29,7 +29,10 @@ export default defineConfig(async ({ command }) => {
 			throw error;
 		}
 
-		// Allow local dev when nitro/vite is temporarily unavailable.
+		console.warn(
+			"[vite-config] 'nitro/vite' is unavailable in dev mode. " +
+				"Nitro plugin was skipped for this session.",
+		);
 	}
 
 	return { plugins };

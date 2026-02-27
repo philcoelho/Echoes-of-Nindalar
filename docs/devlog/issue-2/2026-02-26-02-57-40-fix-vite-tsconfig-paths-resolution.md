@@ -20,14 +20,15 @@ TypeScript flagged `vite-tsconfig-paths` as missing because project dependencies
 
 ### 1. Root-cause fix for dependency installation
 
-- Updated `nitro` in `package.json` from `2.10.4` to `2.2.28` (published version).
-- This unblocks dependency installation so `vite-tsconfig-paths` can be resolved from `node_modules`.
+- Replaced unpublished `nitro` pin `2.10.4` with a temporarily installable version to unblock `bun install`.
+- This unblocked `vite-tsconfig-paths` resolution from `node_modules` for the immediate setup session.
 
 ## Key Technical Details
 
 - `bun install` was failing on an unpublished version pin (`nitro@2.10.4`).
-- Once install is unblocked, TypeScript can resolve both `vite/client` types and `vite-tsconfig-paths`.
+- Once install was unblocked, TypeScript resolved both `vite/client` types and `vite-tsconfig-paths`.
 - Verification run: `bunx tsc --noEmit` no longer reports `vite-tsconfig-paths`; remaining errors are unrelated (`nitro/vite`, `Bun` type).
+- Follow-up note: Nitro dependency strategy was later normalized to TanStack Start guidance (`npm:nitro-nightly@latest`) during PR review fixes.
 
 ## Lessons Learned
 

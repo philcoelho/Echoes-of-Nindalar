@@ -20,24 +20,29 @@ The development server was blocked by `ERR_MODULE_NOT_FOUND` for `nitro/vite`, p
 
 ### 1. Root-cause investigation and docs validation
 
-- Confirmed local `node_modules/nitro` package did not expose `nitro/vite`.
-- Verified current Nitro integration pattern in Context7 docs (`import { nitro } from "nitro/vite"`).
-- Confirmed reinstall attempts were failing due to integrity and network resolution errors.
+- Confirmed local `node_modules/nitro` package did not expose `nitro/vite` because resolution pointed to the unrelated `nitro@2.2.28` package.
+- Verified TanStack Start hosting docs and Context7 references require the UnJS Nitro package path (`import { nitro } from "nitro/vite"`).
+- Confirmed TanStack Start guidance explicitly recommends the nightly alias: `"nitro": "npm:nitro-nightly@latest"`.
 
-### 2. Added resilient Nitro plugin loading
+### 2. Restored Nitro dependency intent and hardened local fallback
 
-- Updated `vite.config.ts` to load Nitro plugin with dynamic import inside `defineConfig(async () => ...)`.
-- Added safe fallback when `nitro/vite` is unavailable, so local dev is not blocked.
+- Restored dependency intent to the TanStack Start recommendation (`npm:nitro-nightly@latest`).
+- Kept dynamic Nitro plugin loading in `vite.config.ts` with a strict guard:
+  - only suppress in `serve` mode
+  - only for `ERR_MODULE_NOT_FOUND` with `nitro/vite`
+  - rethrow all other errors
+- Added an explicit warning log in dev when fallback is triggered.
 
 ## Key Technical Details
 
 - `bun run check` passes after config update.
 - `bun run dev` starts successfully and serves on `http://localhost:3000/`.
-- This is a local resiliency fix while dependency installation remains unstable.
+- `bun run build` still fails fast when `nitro/vite` is unresolved, preserving CI/build safety.
 
 ## Lessons Learned
 
-- Runtime-safe fallback logic should be scoped to local development to avoid masking production misconfiguration.
+- Runtime-safe fallback logic should be scoped to local development and never hide production misconfiguration.
+- Package-name collisions can produce misleading installs; official framework docs must be treated as source of truth for dependency identity.
 
 ## Files Changed
 

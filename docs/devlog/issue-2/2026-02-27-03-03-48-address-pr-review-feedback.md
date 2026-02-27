@@ -2,7 +2,8 @@
 date: 2026-02-27T03:03:48-03:00
 scope: [builder, ui]
 type: fix
-commits: []
+commits:
+  - 712e9a0
 issue: 2
 pr: 14
 ---
@@ -10,8 +11,8 @@ pr: 14
 # Issue 2 - Address PR Review Feedback
 
 **Timestamp:** 2026-02-27T03:03:48-03:00
-**Commits:** `pending`
-**Context:** Resolve Copilot review comments on PR #14 before merge readiness.
+**Commits:** `712e9a0`
+**Context:** Resolve Copilot review comments on PR #14 before merge readiness. This entry remains active for the current follow-up commit.
 
 ## Motivation
 
@@ -24,9 +25,9 @@ The PR received concrete review feedback on runtime safety, dependency consisten
 - Updated `vite.config.ts` to only suppress missing `nitro/vite` in `serve` mode.
 - Added explicit `ERR_MODULE_NOT_FOUND` and `nitro/vite` matching; all other errors are rethrown.
 
-### 2. Aligned dependency declaration with lockfile
+### 2. Aligned dependency declaration with framework guidance
 
-- Updated `package.json` `nitro` dependency to `2.2.28` to match `bun.lock`.
+- Restored `package.json` Nitro dependency to the TanStack Start recommendation: `npm:nitro-nightly@latest`.
 
 ### 3. Normalized devlog entries to project standard
 
@@ -37,7 +38,8 @@ The PR received concrete review feedback on runtime safety, dependency consisten
 
 - `bun run check` passes after the updates.
 - `bun run dev` starts successfully.
-- `bun run build` fails when `nitro/vite` is missing, which now correctly surfaces non-serve misconfiguration.
+- `bun run build` fails when `nitro/vite` is missing, which correctly surfaces non-serve misconfiguration.
+- Follow-up updates in this same session are tracked here and the final commit SHA is appended after commit creation.
 
 ## Lessons Learned
 
