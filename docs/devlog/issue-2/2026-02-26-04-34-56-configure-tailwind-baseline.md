@@ -2,13 +2,14 @@
 date: 2026-02-26T04:34:56-03:00
 scope: [ui]
 type: chore
-commits: []
+commits:
+  - 7d96648
 ---
 
 # UI - Configure Tailwind Baseline
 
-**Timestamp:** 2026-02-26T04:34:56-03:00  
-**Commits:** `pending`  
+**Timestamp:** 2026-02-26T04:34:56-03:00
+**Commits:** `7d96648`
 **Context:** Execute implementation plan Task 2 to establish and verify Tailwind visual baseline.
 
 ## Motivation
@@ -33,7 +34,11 @@ Task 2 requires an explicit QA note and a visible utility-class check in the app
 - No additional Tailwind config files were needed for this baseline task.
 - Verification:
   - `bun run check` passed.
-  - `bun run dev` failed due to unresolved `nitro/vite` module in local environment (`ERR_MODULE_NOT_FOUND`), which blocks visual runtime confirmation for now.
+  - `bun run dev` initially failed due to unresolved `nitro/vite` in local environment.
+
+## Lessons Learned
+
+- Visual smoke checks can be blocked by environment dependency drift, so documenting blocker context in the same session improves traceability.
 
 ## Files Changed
 

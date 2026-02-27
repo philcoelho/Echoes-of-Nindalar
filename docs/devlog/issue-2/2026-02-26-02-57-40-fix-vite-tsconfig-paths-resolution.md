@@ -2,13 +2,14 @@
 date: 2026-02-26T02:57:43-03:00
 scope: [builder]
 type: fix
-commits: []
+commits:
+  - 6aca9ad
 ---
 
 # Builder - Fix vite-tsconfig-paths Resolution
 
-**Timestamp:** 2026-02-26T02:57:43-03:00  
-**Commits:** `pending`  
+**Timestamp:** 2026-02-26T02:57:43-03:00
+**Commits:** `6aca9ad`
 **Context:** Resolve TypeScript module resolution error for `vite-tsconfig-paths` in Vite config.
 
 ## Motivation
@@ -27,6 +28,10 @@ TypeScript flagged `vite-tsconfig-paths` as missing because project dependencies
 - `bun install` was failing on an unpublished version pin (`nitro@2.10.4`).
 - Once install is unblocked, TypeScript can resolve both `vite/client` types and `vite-tsconfig-paths`.
 - Verification run: `bunx tsc --noEmit` no longer reports `vite-tsconfig-paths`; remaining errors are unrelated (`nitro/vite`, `Bun` type).
+
+## Lessons Learned
+
+- Dependency aliases or unpublished versions should be validated before running scaffolding fixes.
 
 ## Files Changed
 

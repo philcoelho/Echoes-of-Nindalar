@@ -2,13 +2,14 @@
 date: 2026-02-26T10:39:35-03:00
 scope: [builder]
 type: fix
-commits: []
+commits:
+  - 7d96648
 ---
 
 # Builder - Unblock Nitro Vite Dev Server
 
-**Timestamp:** 2026-02-26T10:39:35-03:00  
-**Commits:** `pending`  
+**Timestamp:** 2026-02-26T10:39:35-03:00
+**Commits:** `7d96648`
 **Context:** Fix local `bun run dev` startup failure caused by unresolved `nitro/vite`.
 
 ## Motivation
@@ -31,8 +32,12 @@ The development server was blocked by `ERR_MODULE_NOT_FOUND` for `nitro/vite`, p
 ## Key Technical Details
 
 - `bun run check` passes after config update.
-- `bun run dev` now starts successfully and serves on `http://localhost:3000/`.
+- `bun run dev` starts successfully and serves on `http://localhost:3000/`.
 - This is a local resiliency fix while dependency installation remains unstable.
+
+## Lessons Learned
+
+- Runtime-safe fallback logic should be scoped to local development to avoid masking production misconfiguration.
 
 ## Files Changed
 
