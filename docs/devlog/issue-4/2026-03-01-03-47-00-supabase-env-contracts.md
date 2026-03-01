@@ -10,13 +10,15 @@ commits:
   - 4629f41
   - 43263c3
   - a35a103
+  - 21e0716
+  - 5d8bf8f
 issue: 4
 ---
 
 # API - Supabase Env Contracts
 
 **Timestamp:** 2026-03-01T03:47:00-03:00  
-**Commits:** `802b2ee`, `6f459d5`, `2066439`, `8498364`, `4629f41`, `43263c3`, `a35a103`  
+**Commits:** `802b2ee`, `6f459d5`, `2066439`, `8498364`, `4629f41`, `43263c3`, `a35a103`, `21e0716`, `5d8bf8f`  
 **Context:** Execute implementation plan Task 4 for issue #4 with TDD env validation and Supabase connectivity contracts.
 
 ## Motivation
@@ -56,6 +58,11 @@ Created `.env.example` with required keys and added `@supabase/supabase-js` depe
 
 - Added `readServerEnv` to keep server runtime requirements limited to URL + service-role key.
 - Updated server client factory and tests to validate server operation without requiring anon key.
+
+### 8. Added browser client test and less brittle env assertions
+
+- Added `src/lib/supabase/client.test.ts` to assert browser client factory configuration through mocked `createClient`.
+- Relaxed env error assertions to focus on missing key presence rather than exact message ordering.
 
 ## Key Technical Details
 
