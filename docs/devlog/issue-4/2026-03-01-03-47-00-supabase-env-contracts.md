@@ -2,14 +2,15 @@
 date: 2026-03-01T03:47:00-03:00
 scope: [api]
 type: chore
-commits: []
+commits:
+  - 802b2ee
 issue: 4
 ---
 
 # API - Supabase Env Contracts
 
 **Timestamp:** 2026-03-01T03:47:00-03:00  
-**Commits:** `pending`  
+**Commits:** `802b2ee`  
 **Context:** Execute implementation plan Task 4 for issue #4 with TDD env validation and Supabase connectivity contracts.
 
 ## Motivation
