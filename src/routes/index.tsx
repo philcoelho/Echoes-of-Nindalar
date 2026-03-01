@@ -7,10 +7,11 @@ import {
 	Waves,
 	Zap,
 } from "lucide-react";
+import { HomeShadcnPreview } from "@/components/home-shadcn-preview";
 
 export const Route = createFileRoute("/")({ component: App });
 
-function App() {
+export function App() {
 	const features = [
 		{
 			icon: <Zap className="w-12 h-12 text-cyan-400" />,
@@ -56,6 +57,7 @@ function App() {
 				<p className="inline-flex rounded-md border border-cyan-500/60 bg-cyan-500/20 px-3 py-1 text-sm font-medium text-cyan-100">
 					Tailwind baseline check active
 				</p>
+				<HomeShadcnPreview />
 			</div>
 			<section className="relative py-20 px-6 text-center overflow-hidden">
 				<div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10"></div>
