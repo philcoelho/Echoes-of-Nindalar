@@ -21,7 +21,6 @@ describe("createSupabaseServerClient", () => {
 	it("throws in browser-like runtime", () => {
 		vi.stubGlobal("document", {} as Document);
 		vi.stubEnv("VITE_SUPABASE_URL", "https://example.supabase.co");
-		vi.stubEnv("VITE_SUPABASE_ANON_KEY", "anon-key");
 		vi.stubEnv("SUPABASE_SERVICE_ROLE_KEY", "service-role-key");
 		expect(() => createSupabaseServerClient()).toThrow(
 			"createSupabaseServerClient must run on the server.",
@@ -30,7 +29,6 @@ describe("createSupabaseServerClient", () => {
 
 	it("returns a configured supabase client in server runtime", () => {
 		vi.stubEnv("VITE_SUPABASE_URL", "https://example.supabase.co");
-		vi.stubEnv("VITE_SUPABASE_ANON_KEY", "anon-key");
 		vi.stubEnv("SUPABASE_SERVICE_ROLE_KEY", "service-role-key");
 		const result = createSupabaseServerClient();
 

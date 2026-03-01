@@ -5,15 +5,21 @@ const REQUIRED_ENV_KEYS = [
 	"VITE_SUPABASE_ANON_KEY",
 	"SUPABASE_SERVICE_ROLE_KEY",
 ] as const;
+const REQUIRED_SERVER_ENV_KEYS = [
+	"VITE_SUPABASE_URL",
+	"SUPABASE_SERVICE_ROLE_KEY",
+] as const;
 const REQUIRED_PUBLIC_ENV_KEYS = [
 	"VITE_SUPABASE_URL",
 	"VITE_SUPABASE_ANON_KEY",
 ] as const;
 
 type RequiredEnvKey = (typeof REQUIRED_ENV_KEYS)[number];
+type RequiredServerEnvKey = (typeof REQUIRED_SERVER_ENV_KEYS)[number];
 type RequiredPublicEnvKey = (typeof REQUIRED_PUBLIC_ENV_KEYS)[number];
 
 export type AppEnv = Readonly<Record<RequiredEnvKey, string>>;
+export type ServerAppEnv = Readonly<Record<RequiredServerEnvKey, string>>;
 export type PublicAppEnv = Readonly<Record<RequiredPublicEnvKey, string>>;
 
 function validateKeys(source: EnvSource, keys: readonly string[]): string[] {
@@ -59,6 +65,21 @@ export function readEnv(source: EnvSource): AppEnv {
 	return {
 		VITE_SUPABASE_URL: getRequired(source, "VITE_SUPABASE_URL"),
 		VITE_SUPABASE_ANON_KEY: getRequired(source, "VITE_SUPABASE_ANON_KEY"),
+		SUPABASE_SERVICE_ROLE_KEY: getRequired(source, "SUPABASE_SERVICE_ROLE_KEY"),
+	};
+}
+
+export function readServerEnv(source: EnvSource): ServerAppEnv {
+	const missingKeys = validateKeys(source, REQUIRED_SERVER_ENV_KEYS);
+
+	if (missingKeys.length > 0) {
+		throw new Error(
+			`Missing required environment variables: ${missingKeys.join(", ")}`,
+		);
+	}
+
+	return {
+		VITE_SUPABASE_URL: getRequired(source, "VITE_SUPABASE_URL"),
 		SUPABASE_SERVICE_ROLE_KEY: getRequired(source, "SUPABASE_SERVICE_ROLE_KEY"),
 	};
 }

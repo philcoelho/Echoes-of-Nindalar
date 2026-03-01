@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readEnv, readPublicEnv } from "./env";
+import { readEnv, readPublicEnv, readServerEnv } from "./env";
 
 describe("env", () => {
 	it("throws when all required supabase vars are missing", () => {
@@ -50,6 +50,28 @@ describe("env", () => {
 		).toEqual({
 			VITE_SUPABASE_URL: "https://example.supabase.co",
 			VITE_SUPABASE_ANON_KEY: "anon-key",
+		});
+	});
+
+	it("throws when required server variable is missing", () => {
+		expect(() =>
+			readServerEnv({
+				VITE_SUPABASE_URL: "https://example.supabase.co",
+			}),
+		).toThrow(
+			"Missing required environment variables: SUPABASE_SERVICE_ROLE_KEY",
+		);
+	});
+
+	it("returns server env contract for server-only consumer", () => {
+		expect(
+			readServerEnv({
+				VITE_SUPABASE_URL: "https://example.supabase.co",
+				SUPABASE_SERVICE_ROLE_KEY: "service-role-key",
+			}),
+		).toEqual({
+			VITE_SUPABASE_URL: "https://example.supabase.co",
+			SUPABASE_SERVICE_ROLE_KEY: "service-role-key",
 		});
 	});
 });
