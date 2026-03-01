@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { readEnv } from "@/lib/env";
 
 export function createSupabaseServerClient() {
-	if (typeof window !== "undefined") {
+	if (typeof document !== "undefined") {
 		throw new Error("createSupabaseServerClient must run on the server.");
 	}
 

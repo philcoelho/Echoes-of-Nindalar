@@ -1,4 +1,4 @@
-type EnvSource = Record<string, string | undefined>;
+type EnvSource = Record<string, unknown>;
 
 const REQUIRED_ENV_KEYS = [
 	"VITE_SUPABASE_URL",
