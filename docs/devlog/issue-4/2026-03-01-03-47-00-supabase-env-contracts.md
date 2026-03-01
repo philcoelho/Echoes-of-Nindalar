@@ -8,13 +8,15 @@ commits:
   - 2066439
   - 8498364
   - 4629f41
+  - 43263c3
+  - a35a103
 issue: 4
 ---
 
 # API - Supabase Env Contracts
 
 **Timestamp:** 2026-03-01T03:47:00-03:00  
-**Commits:** `802b2ee`, `6f459d5`, `2066439`, `8498364`, `4629f41`  
+**Commits:** `802b2ee`, `6f459d5`, `2066439`, `8498364`, `4629f41`, `43263c3`, `a35a103`  
 **Context:** Execute implementation plan Task 4 for issue #4 with TDD env validation and Supabase connectivity contracts.
 
 ## Motivation
@@ -49,6 +51,11 @@ Created `.env.example` with required keys and added `@supabase/supabase-js` depe
 
 - Replaced direct `process.env` reassignment and global document mutation with `vi.stubEnv` and `vi.stubGlobal`.
 - Added deterministic cleanup through `vi.unstubAllEnvs` and `vi.unstubAllGlobals`.
+
+### 7. Aligned server consumer with server-only env contract
+
+- Added `readServerEnv` to keep server runtime requirements limited to URL + service-role key.
+- Updated server client factory and tests to validate server operation without requiring anon key.
 
 ## Key Technical Details
 
