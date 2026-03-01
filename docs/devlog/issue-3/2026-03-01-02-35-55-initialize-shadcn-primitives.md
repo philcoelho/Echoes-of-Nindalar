@@ -5,13 +5,16 @@ type: feat
 commits:
   - d2f03e1
   - 4527d4c
+  - c58de8b
+  - 6518ba9
+  - 56fa8b2
 issue: 3
 ---
 
 # UI - Initialize Shadcn Primitives
 
 **Timestamp:** 2026-03-01T02:35:55-03:00  
-**Commits:** `d2f03e1`, `4527d4c`  
+**Commits:** `d2f03e1`, `4527d4c`, `c58de8b`, `6518ba9`, `56fa8b2`  
 **Context:** Execute implementation plan Task 3 for issue #3 with shadcn initialization and first primitives.
 
 ## Motivation
@@ -31,6 +34,13 @@ Ran `bunx shadcn@latest init -t start -d -y` and `bunx shadcn@latest add button 
 ### 3. Integrated primitives in the home route
 
 Created `src/components/home-shadcn-preview.tsx` using `Card` and `Button`, then rendered it from `src/routes/index.tsx`.
+
+### 4. Processed Copilot review fixes
+
+- Replaced broad `radix-ui` usage with `@radix-ui/react-slot`.
+- Updated `CardTitle`/`CardDescription` semantics to `h3`/`p`.
+- Hardened `Button` by defaulting `type="button"` when not using `asChild`.
+- Moved runtime CSS-providing packages to `dependencies` to avoid production build resolution issues.
 
 ## Key Technical Details
 
