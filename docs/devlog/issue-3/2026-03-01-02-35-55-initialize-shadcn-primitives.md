@@ -4,13 +4,14 @@ scope: [ui, design-system]
 type: feat
 commits:
   - d2f03e1
+  - 4527d4c
 issue: 3
 ---
 
 # UI - Initialize Shadcn Primitives
 
 **Timestamp:** 2026-03-01T02:35:55-03:00  
-**Commits:** `d2f03e1`  
+**Commits:** `d2f03e1`, `4527d4c`  
 **Context:** Execute implementation plan Task 3 for issue #3 with shadcn initialization and first primitives.
 
 ## Motivation
