@@ -6,15 +6,24 @@ alwaysApply: true
 # Compliance Gate (Mandatory)
 
 Use `docs/standards/superpowers-compliance-checklist.md` as a required quality gate in this project.
+You MUST invoke `.cursor/skills/compliance-gate-auditor/SKILL.md` in every code task before commit/push and before completion claims.
 
 - Before proposing implementation, verify checklist applicability and required artifacts.
+- Before commit or push, run the compliance auditor skill and require explicit `PASS`.
 - Before claiming completion, explicitly validate the 10 checklist items.
 - If any mandatory item fails, stop and fix the gap before proceeding.
+- If any required evidence is missing or ambiguous, treat status as `FAIL`.
 - Keep handoffs objective: include next step and success criteria.
 - Do not skip scope boundaries or non-goals in design and plan outputs.
+- Enforce workflow gates from `docs/standards/github-workflow.md`:
+  - issue and branch pre-check before file changes
+  - mandatory subagent code review loop until `PASS`
+  - compliance gate `PASS` before commit and push
+  - PR target `dev`, assignee `philcoelho`, Copilot review loop processed
 
 ## Required Output Behavior
 
 - Report checklist pass/fail status when finishing substantial tasks.
+- Report compliance auditor result as strict `PASS` or `FAIL`.
 - When blocked by missing inputs, ask concise clarifying questions instead of assuming.
 - Prefer small, testable steps aligned with approved architecture and standards.

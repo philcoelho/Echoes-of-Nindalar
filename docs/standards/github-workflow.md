@@ -4,8 +4,8 @@ title: GitHub Workflow
 description: Standard workflow for issues and pull requests using GitHub MCP tools instead of GitHub CLI.
 doc_type: guideline
 scope: "docs/**"
-version: 2.0.0
-last_updated: 2026-02-25
+version: 2.1.0
+last_updated: 2026-02-27
 status: active
 tags:
   - domain:engineering
@@ -22,7 +22,7 @@ related_docs:
 ## Overview
 
 This document defines the standard GitHub workflow for this project using GitHub MCP operations.
-It replaces `gh` CLI-driven flows with MCP-native actions for repository, issue, and pull request management.
+It uses GitHub MCP Server native actions for repository, issue, and pull request management.
 The goal is to keep issue-to-PR traceability explicit, reduce review risk, and keep changes small and auditable.
 
 ## Goals and Non-Goals
@@ -85,31 +85,60 @@ Prompt-level MCP workflow references:
 
 ## Workflow Steps Using GitHub MCP
 
-- Step 1: Confirm repository and actor context
-  - Use: `get_me`
-  - Validate: authenticated user, target repository owner/name.
-- Step 2: Create or refine the issue
-  - Use: `issue_write` or prompt `issue_to_fix_workflow`.
-  - Minimum input for `issue_to_fix_workflow`: `owner`, `repo`, `title`, `description`.
-  - Optional metadata: `labels`, `assignees`.
-- Step 3: Verify issue details before coding
-  - Use: `issue_read` and optionally `list_issues`.
-  - Validate: scope, acceptance criteria, labels, assignee.
-- Step 4: Create feature branch for the issue
-  - Use: `create_branch`.
-  - Validate: branch naming includes task intent and, when possible, issue reference.
-- Step 5: Open PR targeting integration branch
-  - Use: `create_pull_request`.
-  - Required conventions: base `dev`, semantic title, summary, test plan, and `Closes #<issue>`.
-- Step 6: Maintain PR metadata during review
-  - Use: `update_pull_request`, `pull_request_read`, and `pull_request_review_write`.
-  - Validate: labels/assignee remain aligned with issue and review status.
-- Step 7: Merge only after checks and review
-  - Use: `merge_pull_request`.
-  - Validate: approved review, passing checks, and correct base branch.
-- Step 8: Confirm final linkage state
-  - Use: `issue_read` and `pull_request_read`.
-  - Validate: PR merged and issue status consistent with workflow policy.
+- Step 1: Resolve issue and branch before any file changes
+  - Trigger: task started from a GitHub issue or from `docs/plans/`.
+  - Use: `list_issues`, `issue_read`, `issue_write`, `create_branch`.
+  - Required behavior:
+    - If work starts from `docs/plans/`, verify a matching GitHub issue exists.
+    - If no issue exists, create one before coding.
+    - Verify there is a dedicated branch for the issue or task.
+    - If branch does not exist, create it.
+- Step 2: Checkout to issue branch
+  - Required behavior:
+    - Always checkout to the issue or task branch before implementation.
+    - Never execute implementation directly in workspace default context.
+- Step 3: Execute implementation with ordered context sources
+  - Required behavior:
+    - Use available AI coding sources in this order:
+      - Repository documentation under `docs/`.
+      - MCP servers.
+      - Web search when needed after repository and MCP context.
+- Step 4: Mandatory subagent pre-commit code review
+  - Required behavior:
+    - Before every commit, agents MUST request review through `requesting-code-review`.
+    - Agents MUST wait for result and process feedback through `receiving-code-review`.
+    - Agents MUST NOT skip this step.
+- Step 5: Repeat subagent review until pass
+  - Required behavior:
+    - Agents MUST implement all required fixes from review feedback.
+    - Agents MUST request a new review cycle.
+    - Agents MUST continue until subagent code review status is PASS.
+- Step 6: Run compliance gate before commit and push
+  - Required behavior:
+    - Agents MUST invoke `.cursor/skills/compliance-gate-auditor/SKILL.md` before commit and push.
+    - Validate all mandatory requirements from `.cursor/rules/compliance-gate.mdc`.
+    - If any requirement fails or is unclear, agents MUST resolve gaps and rerun.
+    - Agents MUST commit and push only when compliance gate status is PASS.
+  - Commit rule:
+    - Use semantic commit message format.
+- Step 7: Ensure PR exists for the branch
+  - Use: `list_pull_requests`, `pull_request_read`, `create_pull_request`, `update_pull_request`, `pull_request_review_write`.
+  - Required behavior:
+    - If a PR already exists for the branch, continue to Step 8.
+    - If no PR exists, create one targeting `dev` only, never `main`.
+    - Assign PR to `philcoelho`.
+    - Request Copilot review using GitHub MCP.
+- Step 8: Poll Copilot review comments
+  - Required behavior:
+    - Wait 15 minutes, then check PR comments and review threads.
+    - If Copilot posted review feedback, implement all required changes.
+    - After implementing Copilot feedback, return to Step 4.
+- Step 9: Completion gate for review loop
+  - Required behavior:
+    - Agents MUST continue the loop until all three statuses are PASS:
+      - Subagent Code Review.
+      - Compliance Gate.
+      - GitHub Copilot Code Review.
 
 ## Coding Conventions
 
@@ -143,9 +172,15 @@ Prompt-level MCP workflow references:
 ## Invariants and Critical Rules
 
 - Always use GitHub MCP operations for issue and PR management in agent workflows.
+- Always resolve issue and branch existence before creating or modifying files.
+- Always checkout to the issue branch before implementation work.
+- Never implement directly in workspace default context.
 - Always target `dev` as PR base branch unless explicitly approved otherwise.
 - Always assign `philcoelho` on issues and PRs unless changed by project decision.
 - Always assign `Copilot` for code review on PRs, using GitHub MCP tool for it.
+- Always run subagent code review before any commit and repeat until PASS.
+- Always invoke `.cursor/skills/compliance-gate-auditor/SKILL.md` before commit/push and before completion claims.
+- Always require compliance gate PASS before commit and push.
 - Always include issue reference in PR body, using `Closes #<number>` and explicit context.
 - Never merge unreviewed large PRs that aggregate unrelated tasks.
 - If these invariants are violated, traceability drops and review quality degrades.
@@ -174,12 +209,17 @@ This project will be co-authored by Cursor Agents, powered by the superpowers pl
 ## Known Pitfalls and Anti-Patterns
 
 - Using `gh` CLI in agent-driven workflow where MCP is the project standard.
+- Starting coding from a plan task without creating or linking a GitHub issue.
+- Creating or editing files before branch checkout for the issue.
 - Creating oversized PRs that combine multiple independent tasks.
 - Skipping labels or assignees, which harms triage and queue visibility.
 - Opening PRs directly to `main` for regular feature work.
+- Committing before mandatory subagent review and compliance gate pass.
+- Applying Copilot feedback once but skipping the second mandatory subagent review cycle.
 - Assuming auto-close behavior always works when base branch is not default.
 
 ## Change Notes (High-Level)
 
+- 2026-02-27 - Added mandatory issue-branch pre-check, branch checkout rule, subagent review loop, compliance gate loop, and Copilot feedback loop.
 - 2026-02-25 - Standard rewritten to align with documentation template and migrate workflow from `gh` CLI to GitHub MCP operations.
 - 2026-02-21 - Initial workflow focused on `gh` CLI commands.
