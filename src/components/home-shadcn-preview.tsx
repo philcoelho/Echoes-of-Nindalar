@@ -16,7 +16,8 @@ export function HomeShadcnPreview() {
 					Initialize shadcn/ui primitives
 				</CardTitle>
 				<CardDescription className="text-slate-300">
-					Task 3 baseline complete with reusable `Button` and `Card`.
+					Task 3 baseline complete with reusable <code>Button</code> and{" "}
+					<code>Card</code>.
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="text-sm text-slate-300">
