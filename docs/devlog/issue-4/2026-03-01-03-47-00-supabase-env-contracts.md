@@ -12,13 +12,15 @@ commits:
   - a35a103
   - 21e0716
   - 5d8bf8f
+  - 4b61194
+  - f284bd9
 issue: 4
 ---
 
 # API - Supabase Env Contracts
 
 **Timestamp:** 2026-03-01T03:47:00-03:00  
-**Commits:** `802b2ee`, `6f459d5`, `2066439`, `8498364`, `4629f41`, `43263c3`, `a35a103`, `21e0716`, `5d8bf8f`  
+**Commits:** `802b2ee`, `6f459d5`, `2066439`, `8498364`, `4629f41`, `43263c3`, `a35a103`, `21e0716`, `5d8bf8f`, `4b61194`, `f284bd9`  
 **Context:** Execute implementation plan Task 4 for issue #4 with TDD env validation and Supabase connectivity contracts.
 
 ## Motivation
@@ -63,6 +65,11 @@ Created `.env.example` with required keys and added `@supabase/supabase-js` depe
 
 - Added `src/lib/supabase/client.test.ts` to assert browser client factory configuration through mocked `createClient`.
 - Relaxed env error assertions to focus on missing key presence rather than exact message ordering.
+
+### 9. Clarified privileged client naming
+
+- Renamed `createSupabaseServerClient` to `createSupabaseAdminClient` to make service-role privilege explicit.
+- Updated related tests and error text to avoid accidental misuse in request-scoped code.
 
 ## Key Technical Details
 
