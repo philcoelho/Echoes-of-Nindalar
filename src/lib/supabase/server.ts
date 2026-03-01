@@ -1,9 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
 import { readServerEnv } from "@/lib/env";
 
-export function createSupabaseServerClient() {
+export function createSupabaseAdminClient() {
 	if (typeof document !== "undefined") {
-		throw new Error("createSupabaseServerClient must run on the server.");
+		throw new Error("createSupabaseAdminClient must run on the server.");
 	}
 
 	const env = readServerEnv(process.env);

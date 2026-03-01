@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createSupabaseServerClient } from "./server";
+import { createSupabaseAdminClient } from "./server";
 
 const createClientMock = vi.fn();
 
@@ -7,7 +7,7 @@ vi.mock("@supabase/supabase-js", () => ({
 	createClient: (...args: unknown[]) => createClientMock(...args),
 }));
 
-describe("createSupabaseServerClient", () => {
+describe("createSupabaseAdminClient", () => {
 	beforeEach(() => {
 		createClientMock.mockReset();
 		createClientMock.mockReturnValue({ mocked: "client" });
@@ -22,15 +22,15 @@ describe("createSupabaseServerClient", () => {
 		vi.stubGlobal("document", {} as Document);
 		vi.stubEnv("VITE_SUPABASE_URL", "https://example.supabase.co");
 		vi.stubEnv("SUPABASE_SERVICE_ROLE_KEY", "service-role-key");
-		expect(() => createSupabaseServerClient()).toThrow(
-			"createSupabaseServerClient must run on the server.",
+		expect(() => createSupabaseAdminClient()).toThrow(
+			"createSupabaseAdminClient must run on the server.",
 		);
 	});
 
 	it("returns a configured supabase client in server runtime", () => {
 		vi.stubEnv("VITE_SUPABASE_URL", "https://example.supabase.co");
 		vi.stubEnv("SUPABASE_SERVICE_ROLE_KEY", "service-role-key");
-		const result = createSupabaseServerClient();
+		const result = createSupabaseAdminClient();
 
 		expect(createClientMock).toHaveBeenCalledTimes(1);
 		expect(createClientMock).toHaveBeenCalledWith(

@@ -9,7 +9,7 @@ describe("env", () => {
 		expect(() => readEnv({})).toThrow(/SUPABASE_SERVICE_ROLE_KEY/);
 	});
 
-	it("throws when one required server variable is missing", () => {
+	it("throws when one required app env variable is missing", () => {
 		expect(() =>
 			readEnv({
 				VITE_SUPABASE_URL: "https://example.supabase.co",
@@ -18,7 +18,7 @@ describe("env", () => {
 		).toThrow(/SUPABASE_SERVICE_ROLE_KEY/);
 	});
 
-	it("returns server env contract when all required variables exist", () => {
+	it("returns app env contract when all required variables exist", () => {
 		expect(
 			readEnv({
 				VITE_SUPABASE_URL: "https://example.supabase.co",
