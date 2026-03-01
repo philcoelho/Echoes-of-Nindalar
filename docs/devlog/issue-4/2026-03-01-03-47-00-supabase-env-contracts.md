@@ -4,13 +4,15 @@ scope: [api]
 type: chore
 commits:
   - 802b2ee
+  - 6f459d5
+  - 2066439
 issue: 4
 ---
 
 # API - Supabase Env Contracts
 
 **Timestamp:** 2026-03-01T03:47:00-03:00  
-**Commits:** `802b2ee`  
+**Commits:** `802b2ee`, `6f459d5`, `2066439`  
 **Context:** Execute implementation plan Task 4 for issue #4 with TDD env validation and Supabase connectivity contracts.
 
 ## Motivation
@@ -35,6 +37,12 @@ Created `src/lib/supabase/client.ts` and `src/lib/supabase/server.ts` with `crea
 
 Created `.env.example` with required keys and added `@supabase/supabase-js` dependency.
 
+### 5. Processed Copilot review feedback
+
+- Widened env source typing to work with Vite's `import.meta.env` shape without unsafe casts.
+- Replaced the server runtime guard to use `document` presence, avoiding false positives in Bun.
+- Added `src/lib/supabase/server.test.ts` with mocked `createClient` assertions for factory arguments and return contract.
+
 ## Key Technical Details
 
 - Followed TDD flow: RED (`readEnv` missing) then GREEN (runtime validation passes).
@@ -54,3 +62,4 @@ Created `.env.example` with required keys and added `@supabase/supabase-js` depe
 - `src/lib/env.ts`
 - `src/lib/supabase/client.ts`
 - `src/lib/supabase/server.ts`
+- `src/lib/supabase/server.test.ts`
