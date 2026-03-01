@@ -1,21 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createSupabaseServerClient } from "./server";
 
-const originalProcessEnv = process.env;
 const createClientMock = vi.fn();
 
 vi.mock("@supabase/supabase-js", () => ({
 	createClient: (...args: unknown[]) => createClientMock(...args),
 }));
-
-function withRequiredServerEnv(): NodeJS.ProcessEnv {
-	return {
-		...process.env,
-		VITE_SUPABASE_URL: "https://example.supabase.co",
-		VITE_SUPABASE_ANON_KEY: "anon-key",
-		SUPABASE_SERVICE_ROLE_KEY: "service-role-key",
-	};
-}
 
 describe("createSupabaseServerClient", () => {
 	beforeEach(() => {
@@ -24,19 +14,24 @@ describe("createSupabaseServerClient", () => {
 	});
 
 	afterEach(() => {
-		delete (globalThis as { document?: Document }).document;
-		process.env = originalProcessEnv;
+		vi.unstubAllEnvs();
+		vi.unstubAllGlobals();
 	});
 
 	it("throws in browser-like runtime", () => {
-		(globalThis as { document?: Document }).document = {} as Document;
+		vi.stubGlobal("document", {} as Document);
+		vi.stubEnv("VITE_SUPABASE_URL", "https://example.supabase.co");
+		vi.stubEnv("VITE_SUPABASE_ANON_KEY", "anon-key");
+		vi.stubEnv("SUPABASE_SERVICE_ROLE_KEY", "service-role-key");
 		expect(() => createSupabaseServerClient()).toThrow(
 			"createSupabaseServerClient must run on the server.",
 		);
 	});
 
 	it("returns a configured supabase client in server runtime", () => {
-		process.env = withRequiredServerEnv();
+		vi.stubEnv("VITE_SUPABASE_URL", "https://example.supabase.co");
+		vi.stubEnv("VITE_SUPABASE_ANON_KEY", "anon-key");
+		vi.stubEnv("SUPABASE_SERVICE_ROLE_KEY", "service-role-key");
 		const result = createSupabaseServerClient();
 
 		expect(createClientMock).toHaveBeenCalledTimes(1);
