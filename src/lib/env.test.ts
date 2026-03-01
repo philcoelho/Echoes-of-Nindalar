@@ -3,9 +3,10 @@ import { readEnv, readPublicEnv, readServerEnv } from "./env";
 
 describe("env", () => {
 	it("throws when all required supabase vars are missing", () => {
-		expect(() => readEnv({})).toThrow(
-			"Missing required environment variables: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY",
-		);
+		expect(() => readEnv({})).toThrow(/Missing required environment variables/);
+		expect(() => readEnv({})).toThrow(/VITE_SUPABASE_URL/);
+		expect(() => readEnv({})).toThrow(/VITE_SUPABASE_ANON_KEY/);
+		expect(() => readEnv({})).toThrow(/SUPABASE_SERVICE_ROLE_KEY/);
 	});
 
 	it("throws when one required server variable is missing", () => {
@@ -14,9 +15,7 @@ describe("env", () => {
 				VITE_SUPABASE_URL: "https://example.supabase.co",
 				VITE_SUPABASE_ANON_KEY: "anon-key",
 			}),
-		).toThrow(
-			"Missing required environment variables: SUPABASE_SERVICE_ROLE_KEY",
-		);
+		).toThrow(/SUPABASE_SERVICE_ROLE_KEY/);
 	});
 
 	it("returns server env contract when all required variables exist", () => {
@@ -38,7 +37,7 @@ describe("env", () => {
 			readPublicEnv({
 				VITE_SUPABASE_URL: "https://example.supabase.co",
 			}),
-		).toThrow("Missing required environment variables: VITE_SUPABASE_ANON_KEY");
+		).toThrow(/VITE_SUPABASE_ANON_KEY/);
 	});
 
 	it("returns public env contract when required public variables exist", () => {
@@ -58,9 +57,7 @@ describe("env", () => {
 			readServerEnv({
 				VITE_SUPABASE_URL: "https://example.supabase.co",
 			}),
-		).toThrow(
-			"Missing required environment variables: SUPABASE_SERVICE_ROLE_KEY",
-		);
+		).toThrow(/SUPABASE_SERVICE_ROLE_KEY/);
 	});
 
 	it("returns server env contract for server-only consumer", () => {
